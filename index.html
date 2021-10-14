@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <title>Document</title>
+    <style>
+.container-3 {
+    margin: 0 auto;
+    width: 75%;
+    text-align: center;
+    border: 2px solid black;
+}
+.flex-box-rps {
+    border: 1px solid black;
+    display: flex;
+    padding: 10px;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+#rpsresetbtn{
+    float: right;
+    margin-top: 5px;
+}
+
+
+.flex-box-rps img:hover{
+    box-shadow: 0px 10px 50px rgb(37, 50, 233, 1);
+}
+
+
+
+    </style>
+</head>
+<body>
+    <div class="container-3">
+        <h2>Challenge 3: Rock, Paper, Scissors <button class="btn btn-danger" id="rpsresetbtn"
+                onclick="resetrpsgame()">reset</button>
+        </h2>
+        <div class="flex-box-rps" id="flex-box-rps-div">
+            <img src="Rock.png" height="130" width="130" onclick="rpsgame(this)" id="rock">
+            <img src="paper.jpg" height="130" width="130" onclick="rpsgame(this)" id="paper">
+            <img src="sciss.jpg" height="130" width="130" onclick="rpsgame(this)" id="scissor">
+        </div>
+    </div>
+
+
+
+    <script>
+//  Challenge 3 : Rock paper acissor game
+
+function rpsgame(yourchoice) {
+  console.log("Yourchoice is " + yourchoice.id);
+
+  var humanchoice, botchoice;
+
+  botchoice = numbertochoice(randtorpsint());
+  console.log("botchoice ", botchoice);
+
+  humanchoice = yourchoice.id
+
+  result = decidewinner(humanchoice, botchoice);
+  console.log("Your result ", result)
+  // (1, 1), (0.5, 0.5), (1, 0)
+  message = finalmessage(result);
+  // console.log("YOur message is ", message)
+  //"YOU WON" "color"
+  rpsfrontend(yourchoice.id, botchoice, message);
+
+
+}
+
+function randtorpsint() {
+
+  return Math.floor(Math.random() * 3);
+}
+
+function numbertochoice(number) {
+  return ['rock', 'paper', 'scissor'][number];
+}
+
+function decidewinner(yourchoice, botchoice) {
+
+  var rpsdatabase = {
+    'rock': { 'scissor': 1, 'rock': 0.5, 'paper': 0 },
+    'paper': { 'rock': 1, 'paper': 0.5, 'scissor': 0 },
+    'scissor': { 'paper': 1, 'scissor': 0.5, 'rock': 0 }
+
+  }
+
+  var yourscore = rpsdatabase[yourchoice][botchoice];
+  var computerscore = rpsdatabase[botchoice][yourchoice];
+
+  return [yourscore, computerscore];
+
+}
+
+
+function finalmessage([yourscore, computerscore]) {
+  if (computerscore === 0) {
+    return { "message": 'You WoN!!', 'color': 'blue' };
+  }
+  else if (yourscore === 0.5) {
+    return { 'message': 'You Tied!', 'color': 'yellow' };
+  }
+  else {
+    return { 'message': 'You Lost!!', 'color': 'red' };
+  }
+
+
+}
+
+
+function rpsfrontend(humanimagechoice, botimagechoice, finalmessage) {
+  var imagedatdbase = {
+    'rock': document.getElementById('rock').src,
+    'paper': document.getElementById('paper').src,
+    'scissor': document.getElementById('scissor').src
+  }
+
+  //  let's remove all the images
+  document.getElementById('rock').remove();
+  document.getElementById('paper').remove();
+  document.getElementById('scissor').remove();
+
+  var humandiv = document.createElement('div');
+  var messagediv = document.createElement('div');
+  var botdiv = document.createElement('div');
+
+  humandiv.innerHTML = "<img src='" + imagedatdbase[humanimagechoice] + "' height = 130 weight = 130 style='box-shadow: 0px 10px 50px rgba(37, 50, 233, 1);'>"
+  messagediv.innerHTML = "<h1 style='color : " + finalmessage['color'] + "; font-size: 60px; padding: 30px; '>" + finalmessage['message'] + "</h1>"
+  botdiv.innerHTML = "<img src='" + imagedatdbase[botimagechoice] + "' height = 130 weight = 130 style='box-shadow: 0px 10px 50px rgba(243, 38, 24, 1);'>"
+
+
+  document.getElementById('flex-box-rps-div').appendChild(humandiv);
+  document.getElementById('flex-box-rps-div').appendChild(messagediv);
+  document.getElementById('flex-box-rps-div').appendChild(botdiv);
+
+}
+
+// reset the R P S game
+function resetrpsgame() {
+  document.getElementById("flex-box-rps-div").innerHTML = `
+  <img src="Rock.png" height="130" width="130" onclick="rpsgame(this)" id="rock">
+  <img src="paper.jpg" height="130" width="130" onclick="rpsgame(this)" id="paper">
+  <img src="sciss.jpg" height="130" width="130" onclick="rpsgame(this)" id="scissor">`
+}
+
+
+
+    </script>
+</body>
+</html>
